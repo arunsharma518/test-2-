@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mobile Bill Score — Free Business Mobility Audit</title>
+<meta name="description" content="Find out if your business is overpaying for mobile. Get a free, instant grade on your current plan — rates, contract terms, data, devices and more.">
+<style>
+  :root {
+    --bg: #f4f5f7;
+    --card-bg: #ffffff;
+    --border: #e2e8f0;
+    --border-hover: #cbd5e1;
+    --text: #0f172a;
+    --text-muted: #475569;
+    --text-light: #94a3b8;
+    --blue: #2563eb;
+    --blue-dark: #1d4ed8;
+    --blue-light: #eff6ff;
+    --green: #10b981;
+    --green-light: #ecfdf5;
+    --amber: #f59e0b;
+    --orange: #f97316;
+    --red: #ef4444;
+    --radius: 12px;
+    --radius-sm: 8px;
+    --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-md: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Inter', 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; line-height: 1.5; }
+
+  .page-header { background: #0f172a; color: #fff; padding: 2.5rem 1.5rem; text-align: center; border-bottom: 4px solid var(--blue); }
+  .page-header h1 { font-size: 28px; font-weight: 700; letter-spacing: -0.5px; margin-bottom: 8px; }
+  .page-header p { font-size: 15px; color: #94a3b8; max-width: 520px; margin: 0 auto; }
+
+  .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem; display: grid; grid-template-columns: 1fr; gap: 2rem; }
+  
+  @media(min-width: 900px) {
+    .container { grid-template-columns: 1.2fr 0.8fr; align-items: start; }
+    .sticky-sidebar { position: sticky; top: 2rem; }
+  }
+
+  .step { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow); transition: transform 0.2s, box-shadow 0.2s; }
+  .step:hover { box-shadow: var(--shadow-md); }
+  .step-header { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 1.5rem; }
+  .step-num { width: 28px; height: 28px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 700; flex-shrink: 0; box-shadow: 0 2px 4px rgba(37,99,235,0.2); }
+  .step-title { font-size: 18px; font-weight: 600; color: var(--text); letter-spacing: -0.2px; }
+  .step-sub { font-size: 13px; color: var(--text-muted); margin-top: 2px; }
+  .optional-tag { font-size: 11px; color: var(--text-muted); background: var(--bg); padding: 2px 8px; border-radius: 99px; margin-left: 6px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.02em; }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media(max-width:600px){ .field-row, .field-row.three { grid-template-columns: 1fr; } }
+  
+  .field-group { display: flex; flex-direction: column; gap: 6px; }
+  label { font-size: 13px; color: var(--text); font-weight: 600; }
+  .hint { font-size: 11px; color: var(--text-muted); margin-top: 1px; line-height: 1.4; }
+  
+  input, select, textarea { width: 100%; font-size: 14px; color: var(--text); background: #fff; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 14px; outline: none; transition: all 0.15s ease-in-out; font-family: inherit; box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); }
+  input:focus, select:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15); background: #fff; }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .section-label { font-size: 11px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.08em; margin: 1.5rem 0 0.75rem; }
+  .step .section-label:first-of-type { margin-top: 0; }
+  .divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+
+  .pill-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+  .pill { font-size: 13px; padding: 8px 16px; border-radius: 99px; border: 1px solid var(--border); background: #fff; color: var(--text-muted); cursor: pointer; transition: all 0.15s ease; font-family: inherit; font-weight: 500; }
+  .pill:hover { border-color: var(--border-hover); color: var(--text); background: var(--bg); }
+  .pill.sel { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 2px 4px rgba(37,99,235,0.2); }
+
+  .etf-helper { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-top: 12px; }
+  .etf-helper-title { font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .etf-helper-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+  @media(max-width:600px){ .etf-helper-row { grid-template-columns: 1fr; } }
+  .etf-result { font-size: 13px; color: var(--text); padding-top: 10px; border-top: 1px solid var(--border); }
+  .etf-result strong { color: var(--blue); font-weight: 600; }
+  .etf-formula { font-size: 11px; color: var(--text-light); margin-top: 4px; font-style: italic; }
+
+  .info-box { background: var(--blue-light); border-left: 4px solid var(--blue); border-radius: 4px var(--radius-sm) var(--radius-sm) 4px; padding: 12px 16px; margin-bottom: 16px; font-size: 13.5px; color: var(--text-muted); line-height: 1.6; }
+  .info-box strong { color: #1e40af; }
+  .warning-box { background: #fff7ed; border-left: 4px solid var(--orange); border-radius: 4px var(--radius-sm) var(--radius-sm) 4px; padding: 12px 16px; font-size: 13px; color: #9a3412; line-height: 1.6; display: none; margin-top: 14px; }
+
+  /* RESULTS RIGHT SIDEBAR PANEL */
+  .score-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.5rem; box-shadow: var(--shadow-md); }
+  .score-top { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.25rem; margin-bottom: 1.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  
+  @media(min-width: 450px) {
+    .score-top { flex-direction: row; text-align: left; align-items: center; gap: 1.5rem; }
+  }
+  
+  .score-circle { width: 100px; height: 100px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; flex-shrink: 0; border: 4px solid #e2e8f0; background: #fff; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
+  .score-num { font-size: 32px; font-weight: 800; line-height: 1; }
+  .score-letter { font-size: 18px; font-weight: 700; line-height: 1; margin-top: 2px; }
+  .score-meta { flex: 1; }
+  .score-biz { font-size: 18px; font-weight: 700; color: var(--text); letter-spacing: -0.3px; }
+  .score-desc { font-size: 13.5px; color: var(--text-muted); margin-top: 6px; line-height: 1.5; }
+  
+  .conf-wrap { margin-top: 14px; background: var(--bg); padding: 10px 12px; border-radius: var(--radius-sm); }
+  .conf-head { display: flex; justify-content: space-between; margin-bottom: 4px; align-items: center; }
+  .conf-head span { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; }
+  #conf-pct { font-weight: 700; color: var(--text); }
+  .conf-bar-bg { height: 6px; background: var(--border); border-radius: 99px; overflow: hidden; }
+  .conf-bar { height: 100%; border-radius: 99px; background: var(--blue); transition: width 0.4s ease; }
+  .conf-note { font-size: 11px; color: var(--text-light); margin-top: 5px; line-height: 1.3; }
+
+  .cat-row { display: flex; flex-direction: column; gap: 6px; padding: 12px 0; border-bottom: 1px solid var(--border); }
+  .cat-row:last-child { border-bottom: none; }
+  .cat-header-row { display: flex; justify-content: space-between; align-items: flex-start; }
+  .cat-name { font-size: 13.5px; font-weight: 600; color: var(--text); }
+  .cat-detail { font-size: 11px; color: var(--text-muted); margin-top: 1px; }
+  .cat-stats { display: flex; align-items: center; gap: 12px; text-align: right; }
+  .cat-pts { font-size: 12px; color: var(--text-muted); font-weight: 500; }
+  .cat-grade { font-size: 14px; font-weight: 700; width: 16px; text-align: right; }
+  .cat-bar-bg { width: 100%; height: 6px; background: var(--bg); border-radius: 99px; overflow: hidden; margin-top: 2px; }
+  .cat-bar-fill { height: 100%; border-radius: 99px; transition: width 0.3s ease; }
+  .skipped { color: var(--text-light); font-style: italic; font-size: 12px; }
+
+  .finding-row { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 13.5px; align-items: flex-start; line-height: 1.5; }
+  .finding-row:last-child { border-bottom: none; }
+  .finding-icon { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+  .next-panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; box-shadow: var(--shadow); }
+  .carrier-card { background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; margin-bottom: 12px; }
+  .carrier-card-name { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .carrier-card-info { font-size: 13px; color: var(--text-muted); line-height: 1.6; }
+  .carrier-card-info a { color: var(--blue); text-decoration: none; font-weight: 500; }
+  .carrier-card-info a:hover { text-decoration: underline; }
+
+  .btn { width: 100%; text-align: center; font-size: 14px; padding: 12px 24px; border-radius: var(--radius-sm); border: 1px solid var(--border-hover); background: #fff; color: var(--text); cursor: pointer; font-family: inherit; font-weight: 600; transition: all 0.15s ease; box-shadow: var(--shadow); }
+  .btn:hover { background: var(--bg); border-color: var(--border-hover); }
+  .btn-primary { background: var(--blue); border-color: var(--blue); color: #fff; box-shadow: 0 4px 6px -1px rgba(37,99,235,0.2); }
+  .btn-primary:hover { background: var(--blue-dark); border-color: var(--blue-dark); }
+  .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .page-footer { text-align: center; padding: 3rem 1rem; font-size: 13px; color: var(--text-light); width: 100%; grid-column: 1 / -1; border-top: 1px solid var(--border); margin-top: 2rem; }
+  
+  .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-light); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+  .empty-state-icon { font-size: 32px; opacity: 0.7; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>📋 Mobile Bill Score</h1>
+  <p>Find out if your business is overpaying for mobile. Free, instant, no obligation analytics.</p>
+</div>
+
+<div class="container">
+  
+  <div class="form-column">
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">1</div>
+        <div>
+          <div class="step-title">Business info</div>
+          <div class="step-sub">Your contact details for this audit</div>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Business name</label><input type="text" id="biz-name" placeholder="ACME Inc." oninput="calc()"></div>
+        <div class="field-group"><label>Contact name</label><input type="text" id="contact-name" placeholder="Jane Smith"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Email <span class="optional-tag">optional</span></label><input type="email" id="contact-email" placeholder="jane@acme.com"></div>
+        <div class="field-group"><label>Phone <span class="optional-tag">optional</span></label><input type="tel" id="contact-phone" placeholder="604-555-0100"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-group"><label>Current carrier</label>
+          <select id="carrier" onchange="calc()">
+            <option value="">Select carrier</option>
+            <option>Rogers</option><option>Bell</option><option>Fido Business</option><option>Koodo Business</option><option>Telus</option><option>Videotron</option><option>Shaw Mobile</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field-group"><label>Industry <span class="optional-tag">optional</span></label>
+          <select id="industry">
+            <option value="">Select industry</option>
+            <option>Construction / Trades</option><option>Real Estate</option><option>Property Management</option><option>Transportation / Logistics</option><option>Healthcare</option><option>Professional Services</option><option>Retail</option><option>Hospitality</option><option>Technology</option><option>Other</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">2</div>
+        <div>
+          <div class="step-title">Plan details</div>
+          <div class="step-sub">Core inputs — fill what you know, skip what you don't</div>
+        </div>
+      </div>
+      <div class="section-label">Lines & pricing</div>
+      <div class="field-row three">
+        <div class="field-group"><label>Total lines</label><input type="number" id="lines" placeholder="e.g. 30" min="1" oninput="calc()"></div>
+        <div class="field-group"><label>Monthly rate per line ($)</label><input type="number" id="rate" placeholder="e.g. 50" min="0" oninput="calc()"></div>
+        <div class="field-group"><label>Monthly credits per line ($) <span class="optional-tag">optional</span></label><input type="number" id="credits" placeholder="e.g. 4" min="0" oninput="calc()"></div>
+      </div>
+      <div class="section-label">Coverage tier</div>
+      <div class="pill-row">
+        <button class="pill sel" onclick="selPill('tier',this,'canada')">Canada-wide</button>
+        <button class="pill" onclick="selPill('tier',this,'can-us')">Can-US</button>
+        <button class="pill" onclick="selPill('tier',this,'can-us-mex')">Can-US-Mex</button>
+        <button class="pill" onclick="selPill('tier',this,'global')">Global</button>
+        <button class="pill" onclick="selPill('tier',this,'mixed')">Mixed</button>
+      </div>
+      <div class="section-label">Deal type</div>
+      <div class="pill-row">
+        <button class="pill sel" onclick="selPill('deal',this,'byod')">BYOD</button>
+        <button class="pill" onclick="selPill('deal',this,'mtm')">Month-to-month</button>
+        <button class="pill" onclick="selPill('deal',this,'2yr')">2-year</button>
+        <button class="pill" onclick="selPill('deal',this,'3yr')">3-year</button>
+      </div>
+      <div class="divider"></div>
+      <div class="section-label">Data plan <span class="optional-tag">optional</span></div>
+      <div class="field-row">
+        <div class="field-group"><label>Data per line (GB)</label><input type="number" id="data-gb" placeholder="e.g. 20" min="0" oninput="calc()"></div>
+        <div class="field-group"><label>Total overages on bill ($)</label><input type="number" id="overages" placeholder="e.g. 0" min="0" oninput="calc()"></div>
+      </div>
+      <div class="section-label">Data structure</div>
+      <div class="pill-row">
+        <button class="pill" onclick="selPill('data',this,'shared')">Shareable / pooled</button>
+        <button class="pill" onclick="selPill('data',this,'individual')">Individual per line</button>
+        <button class="pill sel" onclick="selPill('data',this,'unknown')">Not sure</button>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">3</div>
+        <div>
+          <div class="step-title">Contract <span class="optional-tag">optional</span></div>
+          <div class="step-sub">Term details and remaining commitment</div>
+        </div>
+      </div>
+      <div class="field-row three">
+        <div class="field-group"><label>Contract start date</label><input type="month" id="contract-start" oninput="calcRemaining()"></div>
+        <div class="field-group"><label>Contract length</label>
+          <select id="contract-len" onchange="calcRemaining()">
+            <option value="">Select</option><option value="12">1 year</option><option value="24">2 years</option><option value="36">3 years</option><option value="0">Month-to-month</option>
+          </select>
+        </div>
+        <div class="field-group"><label>Months remaining</label><input type="number" id="months-left" placeholder="Auto-calculated" min="0" oninput="calc()"></div>
+      </div>
+      <div class="field-group">
+        <label>Early Transfer / Cancellation Fees — total ($)</label>
+        <input type="number" id="etf" placeholder="e.g. 616" min="0" oninput="calc()">
+        <div class="etf-helper">
+          <div class="etf-helper-title">ETF estimator — calculate total dynamic discount balance</div>
+          <div class="etf-helper-row">
+            <div class="field-group">
+              <label>Monthly discount per line ($)</label>
+              <input type="number" id="etf-credits" placeholder="e.g. 19" min="0" oninput="calcETF()">
+            </div>
+            <div class="field-group"><label>Contract Length</label><input type="number" id="etf-len" placeholder="e.g. 36" min="1" oninput="calcETF()"></div>
+            <div class="field-group"><label>Months remaining</label><input type="number" id="etf-rem" placeholder="e.g. 6" min="0" oninput="calcETF()"></div>
+          </div>
+          <div class="etf-result" id="etf-result" style="display:none;">
+            Per line: <strong id="etf-per-line">--</strong> &nbsp;·&nbsp; Total across <strong id="etf-line-count">--</strong> lines: <strong id="etf-total">--</strong>
+            <div class="etf-formula">Formula: monthly plan discount × months remaining = ETF per line</div>
+          </div>
+        </div>
+      </div>
+      <div class="field-group" style="margin-top:12px;">
+        <label>Orphaned lines on separate contracts</label>
+        <select id="orphans" onchange="calc()">
+          <option value="0">None</option><option value="1">1 line</option><option value="2">2–3 lines</option><option value="3">4+ lines</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">4</div>
+        <div>
+          <div class="step-title">Devices <span class="optional-tag">optional</span></div>
+          <div class="step-sub">Only scored on lines that have subsidized devices</div>
+        </div>
+      </div>
+      <div class="field-row three">
+        <div class="field-group"><label>Lines with devices</label><input type="number" id="dev-lines" placeholder="e.g. 4" min="0" oninput="calc()"></div>
+        <div class="field-group"><label>Device base price ($)</label><input type="number" id="dev-price" placeholder="e.g. 1300" min="0" oninput="calc()"></div>
+        <div class="field-group"><label>Subsidy per device ($)</label><input type="number" id="dev-subsidy" placeholder="e.g. 300" min="0" oninput="calc()"></div>
+      </div>
+      <div style="font-size:12px; color:var(--text-muted); margin-top:10px; font-style:italic;">$300+ subsidy = strong &nbsp;·&nbsp; $200–$299 = fair &nbsp;·&nbsp; under $200 = room to improve</div>
+    </div>
+
+    <div class="step">
+      <div class="step-header">
+        <div class="step-num">5</div>
+        <div>
+          <div class="step-title">Support <span class="optional-tag">optional</span></div>
+          <div class="step-sub">How you interact with your carrier today</div>
+        </div>
+      </div>
+      <div class="section-label">What best describes your current support arrangement?</div>
+      <div class="pill-row">
+        <button class="pill sel" onclick="selPill('support',this,'unknown')">Not sure</button>
+        <button class="pill" onclick="selPill('support',this,'proactive')">Proactive dedicated rep</button>
+        <button class="pill" onclick="selPill('support',this,'named')">Named rep, same-day response</button>
+        <button class="pill" onclick="selPill('support',this,'biz-line')">Business support line</button>
+        <button class="pill" onclick="selPill('support',this,'1800')">1-800 consumer
